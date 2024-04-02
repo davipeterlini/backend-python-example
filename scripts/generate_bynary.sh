@@ -23,4 +23,3 @@ echo "Deactivating virtual environment..."
 deactivate
 
 echo "Binary generation completed successfully. Check the dist/ directory."
-	
