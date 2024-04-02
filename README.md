@@ -9,13 +9,13 @@ backend-python-example/
 │   ├── __init__.py
 │   ├── main.py         # Ponto de entrada da aplicação
 │   ├── models.py       # Define os modelos de dados
-│   ├── config.py       # Configurações do aplicativo
 │   └── crud.py         # Operações CRUD
-│
 ├── tests/              # Contém os testes da aplicação.
 │   ├── __init__.py
 │   └── test_app.py     # Testes da aplicação
-│
+├── run.py/             # Contém os testes da aplicação.
+├── config.py           # Configurações do aplicativo
+|
 ├── Dockerfile
 ├── docker-compose.yml  # Docker compose para PostgreSQL e H2
 ├── requirements.txt    # Dependências Python
@@ -80,30 +80,30 @@ docker-compose up -d
 
 4. Exec APP
 ```shell
-python app/main.py
+python run.py
 ```
 
 5. Run tests
 ```shell
 curl http://localhost:5000/
 # POST
-curl -X POST http://localhost:5000/veiculos \
+curl -X POST http://localhost:5000/vehicles \
      -H 'Content-Type: application/json' \
      -d '{"modelo": "Modelo Exemplo", "marca": "Marca Exemplo", "ano": 2020, "preco": 35000}'
 # GET
-curl http://localhost:5000/veiculos
+curl http://localhost:5000/vehicles
 # UPDATE
-curl -X PUT http://localhost:5000/veiculos/1 \
+curl -X PUT http://localhost:5000/vehicles/1 \
 -H 'Content-Type: application/json' \
 -d '{"modelo": "Modelo Atualizado", "marca": "Marca Atualizada", "ano": 2021, "preco": 50000}'
 # DELETE
-curl -X DELETE http://localhost:5000/veiculos/1
+curl -X DELETE http://localhost:5000/vehicles/1
 ```
 
 6. Database Validation
 ```shell
-# Open Dbeaver --> Create a New Connection --> Create a SQLite with instance/veiculos.db --> Open Editor and exec query: 
-SELECT * FROM veiculos;
+# Open Dbeaver --> Create a New Connection --> Create a SQLite with instance/vehicles.db --> Open Editor and exec query: 
+SELECT * FROM vehicles;
 ```
 
 ## Execute APP Test
@@ -152,8 +152,8 @@ chmod +x generate_bynary.sh
 
 3. Run Binary
 ```shell
-chmod +x dist/app_veiculos
-./dist/app_veiculos
+chmod +x dist/app_vehicles
+./dist/app_vehicles
 ```
 
 ## Generatge Image

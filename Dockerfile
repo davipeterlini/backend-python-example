@@ -12,12 +12,12 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the binary file from the local directory to the working directory in the container.
-#COPY ./dist/app_veiculos /app/app_veiculos
-COPY ./dist/app_veiculos /app/app_veiculos
+#COPY ./dist/app_vehicles /app/app_vehicles
+COPY ./dist/app_vehicles /app/app_vehicles
 
 # Make port 5000 available to the world outside this container
 EXPOSE 5000
 
 # Comando para executar o aplicativo
-CMD ["python", "app_veiculos"]
-# CMD ["./app/app_veiculos"]
+CMD ["python", "app_vehicles"]
+# CMD ["./app/app_vehicles"]

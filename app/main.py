@@ -1,42 +1,45 @@
-from flask import Flask, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from models import db, Veiculo
-from config import Config
-from crud import adicionar_veiculo, listar_veiculos, atualizar_veiculo, deletar_veiculo
+from flask import Flask, jsonify, request
+from . import db  # Importa a inicialização do SQLAlchemy
+from config import Config  # Importa as configurações
+from .crud import adicionar_vehicle, listar_vehicles, atualizar_vehicle, deletar_vehicle
+    
 
-app = Flask(__name__)
-app.config.from_object(Config)
-db.init_app(app)
+def create_app(config_class=Config):
+    app = Flask(__name__)
+    app.config.from_object(config_class)
 
-# Creating the database and tables
-with app.app_context():
-    db.create_all()
+    db.init_app(app)
 
-# Criação da aplicação e rotas abaixo
-@app.route('/veiculos', methods=['GET', 'POST'])
-def handle_veiculos():
-    if request.method == 'POST':
-        data = request.get_json()
-        veiculo = adicionar_veiculo(data['modelo'], data['marca'], data['ano'], data['preco'])
-        return jsonify({'message': 'Vehicle added successfully!', 'id': veiculo.id}), 201
-    else:
-        veiculos = listar_veiculos()
-        return jsonify([{'id': v.id, 'modelo': v.modelo, 'marca': v.marca, 'ano': v.ano, 'preco': v.preco} for v in veiculos]), 200
+    with app.app_context():
+        db.create_all()
 
-@app.route('/veiculos/<int:id>', methods=['PUT', 'DELETE'])
-def handle_veiculo(id):
-    if request.method == 'PUT':
-        data = request.get_json()
-        veiculo = atualizar_veiculo(id, data.get('modelo'), data.get('marca'), data.get('ano'), data.get('preco'))
-        if veiculo:
-            return jsonify({'message': 'Vehicle updated successfully.'}), 200
+    @app.route('/')
+    def hello():
+        return "Hello, World!"
+
+    @app.route('/vehicles', methods=['GET', 'POST'])
+    def handle_vehicles():
+        if request.method == 'POST':
+            data = request.get_json()
+            vehicle = adicionar_vehicle(data['modelo'], data['marca'], data['ano'], data['preco'])
+            return jsonify({'message': 'Vehicle added successfully!', 'id': vehicle.id}), 201
         else:
-            return jsonify({'message': 'Vehicle not found.'}), 404
-    elif request.method == 'DELETE':
-        if deletar_veiculo(id):
-            return jsonify({'message': 'Vehicle deleted successfully.'}), 200
-        else:
-            return jsonify({'message': 'Vehicle not found.'}), 404
+            vehicles = listar_vehicles()
+            return jsonify([{'id': v.id, 'modelo': v.modelo, 'marca': v.marca, 'ano': v.ano, 'preco': v.preco} for v in vehicles]), 200
 
-if __name__ == '__main__':
-    app.run(debug=True)
+    @app.route('/vehicles/<int:id>', methods=['PUT', 'DELETE'])
+    def handle_vehicle(id):
+        if request.method == 'PUT':
+            data = request.get_json()
+            vehicle = atualizar_vehicle(id, data.get('modelo'), data.get('marca'), data.get('ano'), data.get('preco'))
+            if vehicle:
+                return jsonify({'message': 'Vehicle updated successfully.'}), 200
+            else:
+                return jsonify({'message': 'Vehicle not found.'}), 404
+        elif request.method == 'DELETE':
+            if deletar_vehicle(id):
+                return jsonify({'message': 'Vehicle deleted successfully.'}), 200
+            else:
+                return jsonify({'message': 'Vehicle not found.'}), 404
+
+    return app

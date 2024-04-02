@@ -1,9 +1,7 @@
-from flask_sqlalchemy import SQLAlchemy
+from . import db
 
-db = SQLAlchemy()
-
-class Veiculo(db.Model):
-    __tablename__ = 'veiculos'
+class Vehicle(db.Model):
+    __tablename__ = 'vehicles'
     
     id = db.Column(db.Integer, primary_key=True)
     modelo = db.Column(db.String(128), nullable=False)
@@ -18,4 +16,4 @@ class Veiculo(db.Model):
         self.preco = preco
 
     def __repr__(self):
-        return f'<Veiculo {self.modelo}>'
+        return f'<Vehicle {self.modelo}>'

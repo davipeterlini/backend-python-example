@@ -1,29 +1,30 @@
-from models import db, Veiculo
+from .models import Vehicle
+from . import db
 
-def adicionar_veiculo(modelo, marca, ano, preco):
-    novo_veiculo = Veiculo(modelo=modelo, marca=marca, ano=ano, preco=preco)
-    db.session.add(novo_veiculo)
+def adicionar_vehicle(modelo, marca, ano, preco):
+    novo_vehicle = Vehicle(modelo=modelo, marca=marca, ano=ano, preco=preco)
+    db.session.add(novo_vehicle)
     db.session.commit()
-    return novo_veiculo
+    return novo_vehicle
 
-def listar_veiculos():
-    return Veiculo.query.all()
+def listar_vehicles():
+    return Vehicle.query.all()
 
-def atualizar_veiculo(id, modelo, marca, ano, preco):
-    veiculo = Veiculo.query.filter_by(id=id).first()
-    if veiculo:
-        veiculo.modelo = modelo
-        veiculo.marca = marca
-        veiculo.ano = ano
-        veiculo.preco = preco
+def atualizar_vehicle(id, modelo, marca, ano, preco):
+    vehicle = Vehicle.query.filter_by(id=id).first()
+    if vehicle:
+        vehicle.modelo = modelo
+        vehicle.marca = marca
+        vehicle.ano = ano
+        vehicle.preco = preco
         db.session.commit()
-        return veiculo
+        return vehicle
     return None
 
-def deletar_veiculo(id):
-    veiculo = Veiculo.query.filter_by(id=id).first()
-    if veiculo:
-        db.session.delete(veiculo)
+def deletar_vehicle(id):
+    vehicle = Vehicle.query.filter_by(id=id).first()
+    if vehicle:
+        db.session.delete(vehicle)
         db.session.commit()
         return True
     return False
