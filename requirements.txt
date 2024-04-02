@@ -1,5 +1,8 @@
 Flask
 SQLAlchemy
 psycopg2-binary
-pytest
 python-dotenv
+pytest
+pytest-flask
+Flask-Testing
+coverage

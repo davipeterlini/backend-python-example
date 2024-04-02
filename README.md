@@ -106,10 +106,38 @@ curl -X DELETE http://localhost:5000/veiculos/1
 SELECT * FROM veiculos;
 ```
 
+## Execute APP Test
+
+1. Adding Dependencies in requirements.txt
+```shell
+pytest
+pytest-flask
+Flask-Testing
+coverage
+```
+
+2. Update virtual enviroment
+```shell
+source virtual_enviroment/bin/activate
+pip install -r requirements.txt
+```
+
+3. Exec APP Tests
+```shell
+pytest tests/
+```
+
+4. Coverage Test
+```shell
+coverage run -m pytest tests/
+coverage report
+```
+
+
 
 ## Create Binary Packge
 
-1. Install pyinstaller
+1. Dependencies
 ```shell
 source virtual_enviroment/bin/activate
 pip install pyinstaller
@@ -122,6 +150,12 @@ chmod +x generate_bynary.sh
 ./generate_bynary.sh
 ```
 
+3. Run Binary
+```shell
+chmod +x dist/app_veiculos
+./dist/app_veiculos
+```
+
 ## Generatge Image
 
 1. Create Image
@@ -129,13 +163,12 @@ chmod +x generate_bynary.sh
 docker build -t app_image .
 docker build -t app_image:latest .
 docker build --no-cache -t app_image:latest .
-docker run -d -p 5000:5000 app_image
 ```
 
 2. Run image with docker
 ```shell
-docker run -p 5000:5000 app_veiculos:latest
-docker run -d -p 5000:5000 app_image
+docker run -p 5000:5000 app_image:latest
+docker run -d -p 5000:5000 app_image:latest
 ```
 
 3. Run tests
@@ -143,22 +176,6 @@ docker run -d -p 5000:5000 app_image
 curl http://localhost:5000/
 curl -d '{"chave":"valor"}' -H "Content-Type: application/json" -X POST http://localhost:5000/caminho_do_recurso
 ```
-
-## Execute APP Test
-
-1. Exec APP Tests
-```shell
-pytest tests/
-```
-
-2. Exec CURL
-```shell
-curl http://localhost:8080/api/resource
-curl -d '{"key1":"value1", "key2":"value2"}' -H "Content-Type: application/json" -X POST http://localhost:8080/api/resource
-```
-
-
-
 
 
 # Docker compose to build 
