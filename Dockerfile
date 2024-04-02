@@ -1,17 +1,31 @@
-FROM python:3.9-slim
+# Use uma imagem oficial do Python como imagem base.
+FROM python:3.8-slim as builder
+
+# Define o diretório de trabalho dentro do container.
+WORKDIR /app
+
+# Copia os arquivos de requisitos primeiro para aproveitar o cache do Docker.
+COPY requirements.txt .
+
+# Instala as dependências.
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install pyinstaller
+
+# Copia o restante dos arquivos da aplicação para o container.
+COPY . .
+
+# Gera o binário da aplicação utilizando PyInstaller ou sua ferramenta de escolha.
+# Isso assume que você tem um script de build ou um comando direto do PyInstaller.
+# Exemplo: pyinstaller --onefile app/main.py
+RUN pyinstaller --onefile run.py -n app_vehicles
+
+# Use uma nova etapa de build para manter a imagem final enxuta.
+FROM python:3.8-slim
 
 WORKDIR /app
 
-# Copiar o arquivo de dependências e instalar as dependências
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copia apenas o binário gerado para a nova imagem, descartando o restante.
+COPY --from=builder /dist/app_vehicles .
 
-# Copy the binary file from the local directory to the working directory in the container.
-COPY ./dist/app_vehicles app_vehicles
-
-# Make port 5000 available to the world outside this container
-EXPOSE 5000
-
-# Comando para executar o aplicativo
-RUN ls -la
-CMD ["python", "app_vehicles"]
+# Define o comando para executar o binário.
+CMD ["./app/app_vehicles"]
